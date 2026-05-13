@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة نتائج معهد المستقبل</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a; /* أزرق ملكي */
+            --secondary-color: #3b82f6;
+            --accent-color: #fbbf24; /* ذهبي */
+            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-gradient);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: #334e68;
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            text-align: center; 
+            width: 95%; 
+            max-width: 480px; 
+            border-top: 8px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0;
+            width: 100px; height: 100px;
+            background: var(--accent-color);
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+            opacity: 0.1;
+        }
+        .college-name {
+            font-size: 16px;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+        h2 { color: #102a43; margin-bottom: 5px; font-size: 24px; }
+        h3 { color: var(--secondary-color); margin-bottom: 25px; font-size: 18px; font-weight: 500; }
+        
+        .input-wrapper { margin-bottom: 25px; }
+        input { 
+            width: 100%; padding: 15px; 
+            border: 2px solid #cbd5e0; border-radius: 12px; 
+            font-size: 18px; text-align: center; 
+            box-sizing: border-box; transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        input:focus { border-color: var(--secondary-color); outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); }
+        
+        button { 
+            background: var(--primary-color); 
+            color: white; border: none; padding: 15px 25px; 
+            border-radius: 12px; cursor: pointer; font-size: 18px; 
+            width: 100%; font-weight: bold; transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(30, 58, 138, 0.2);
+        }
+        button:hover { background: #1e40af; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(30, 58, 138, 0.3); }
+        
+        #result-page { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .student-info { 
+            background: #f1f5f9; padding: 20px; border-radius: 12px; 
+            margin-bottom: 25px; text-align: right; line-height: 1.8;
+            border-right: 5px solid var(--accent-color);
+        }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; border-radius: 12px; overflow: hidden; }
+        th, td { padding: 14px; text-align: center; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 14px; }
+        td { background-color: #ffffff; font-size: 15px; }
+        .grade-good { color: #059669; font-weight: bold; }
+        .grade-pass { color: #d97706; font-weight: bold; }
+        .back-btn { background-color: #64748b; margin-top: 25px; }
+    </style>
+</head>
+<body>
+
+    <!-- صفحة تسجيل الدخول -->
+    <div id="login-page" class="card">
+        <span class="college-name">معهد المستقبل العالي للتجارة والعلوم الإدارية</span>
+        <h2>نظام الاستعلام الإلكتروني</h2>
+        <p style="color: #627d98;">أدخل رقم الجلوس للاطلاع على تفاصيل النتيجة</p>
+        <div class="input-wrapper">
+            <input type="number" id="user-id" placeholder="663638">
+        </div>
+        <button onclick="checkId()">استعلام الآن</button>
+    </div>
+
+    <!-- صفحة النتيجة -->
+    <div id="result-page" class="card">
+        <span class="college-name">معهد المستقبل العالي للتجارة والعلوم الإدارية</span>
+        <h2>نتيجة الفصل الدراسي الأول</h2>
+        <h3>الفرقة الثانية</h3>
+        
+        <div class="student-info">
+            <strong>الاسم:</strong> ياسر محمد جوده محمد الدقدوسي <br>
+            <strong>رقم الجلوس:</strong> <span id="display-id" style="color: var(--primary-color);"></span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>المادة</th>
+                    <th>التقدير</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>مبادئ المحاسبة الإدارية</td><td class="grade-pass">مقبول</td></tr>
+                <tr><td>إدارة الإنتاج والعمليات</td><td class="grade-good">جيد</td></tr>
+                <tr><td>مبادئ الإدارة المالية</td><td class="grade-good">جيد</td></tr>
+                <tr><td>تحليلات الأعمال</td><td class="grade-pass">مقبول</td></tr>
+                <tr><td>نظم المعلومات الإدارية</td><td class="grade-good">جيد</td></tr>
+                <tr><td>لغة أجنبية 2</td><td class="grade-good">جيد</td></tr>
+            </tbody>
+        </table>
+        
+        <button class="back-btn" onclick="location.reload()">استعلام عن نتيجة أخرى</button>
+    </div>
+
+    <script>
+        const correctId = "663638"; 
+
+        function checkId() {
+            const inputId = document.getElementById('user-id').value;
+            if (inputId === correctId) {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('result-page').style.display = 'block';
+                document.getElementById('display-id').innerText = correctId;
+            } else {
+                alert("رقم الجلوس غير صحيح! يرجى التأكد من الرقم والمحاولة مرة أخرى.");
+            }
+        }
+    </script>
+</body>
+</html>
